@@ -106,7 +106,6 @@ class DiscriminatorH(nn.Module):
 
         # FCN classification layer
         model += [nn.Conv2d(in_features*16, 1, 3, padding=1)]
-        # model += [nn.Conv2d(in_features*8, 1, 3, padding=1)]
 
         self.model = nn.Sequential(*model)
 
@@ -142,7 +141,6 @@ class DiscriminatorL(nn.Module):
 
         # FCN classification layer
         model += [nn.Conv2d(in_features*16, 1, 3, padding=1)]
-        # model += [nn.Conv2d(in_features*8, 1, 3, padding=1)]
         self.model = nn.Sequential(*model)
 
     def forward(self, x):
