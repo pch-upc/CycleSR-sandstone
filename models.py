@@ -20,7 +20,7 @@ class ResidualBlock(nn.Module):
 class GeneratorL2H(nn.Module):
     def __init__(self, input_nc, output_nc, n_residual_blocks=9):
         super(GeneratorL2H, self).__init__()
-        in_features = 128
+        in_features = 64
         # Initial convolution block       
         model = [   nn.ReflectionPad2d(1),
                     nn.Conv2d(input_nc, in_features, 3),
@@ -31,17 +31,11 @@ class GeneratorL2H(nn.Module):
             model += [ResidualBlock(in_features)]
 
         # Upsampling
-        out_features = in_features//2
         for _ in range(3):
-            # model += [  nn.ConvTranspose2d(in_features, out_features, 3, stride=2, padding=1, output_padding=1),
-            #             nn.InstanceNorm2d(out_features),
-            #             nn.ReLU(inplace=True) ]
             model += [  nn.Conv2d(in_features, out_features, 7, stride=1, padding=3),
                         nn.Upsample(scale_factor=2.0, mode='nearest'),
                         nn.InstanceNorm2d(out_features),
                         nn.ReLU(inplace=True) ]
-            in_features = out_features
-            out_features = in_features//2
 
         # Output layer
         model += [  nn.ReflectionPad2d(3),
@@ -58,7 +52,7 @@ class GeneratorL2H(nn.Module):
 class GeneratorH2L(nn.Module):
     def __init__(self, input_nc, output_nc, n_residual_blocks=9):
         super(GeneratorH2L, self).__init__()
-        in_features = 10
+        in_features = 64
         # Initial convolution block       
         model = [   nn.ReflectionPad2d(3),
                     nn.Conv2d(input_nc, in_features, 7),
@@ -66,13 +60,10 @@ class GeneratorH2L(nn.Module):
                     nn.ReLU(inplace=True) ]
 
         # Downsampling
-        out_features = in_features*2
         for _ in range(3):
             model += [  nn.Conv2d(in_features, out_features, 7, stride=2, padding=3),
                         nn.InstanceNorm2d(out_features),
                         nn.ReLU(inplace=True) ]
-            in_features = out_features
-            out_features = in_features*2
 
         for _ in range(n_residual_blocks):
             model += [ResidualBlock(in_features)]
@@ -92,7 +83,7 @@ class GeneratorH2L(nn.Module):
 class DiscriminatorH(nn.Module):
     def __init__(self, input_nc):
         super(DiscriminatorH, self).__init__()
-        in_features = 8
+        in_features = 64
         # A bunch of convolutions one after another
         model = [   nn.Conv2d(input_nc, in_features, 7, stride=2, padding=3),
                     nn.LeakyReLU(0.2, inplace=True) ]
@@ -128,7 +119,7 @@ class DiscriminatorH(nn.Module):
 class DiscriminatorL(nn.Module):
     def __init__(self, input_nc):
         super(DiscriminatorL, self).__init__()
-        in_features = 8
+        in_features = 64
         # A bunch of convolutions one after another
         model = [   nn.Conv2d(input_nc, in_features, 3, stride=1, padding=1),
                     nn.LeakyReLU(0.2, inplace=True) ]
