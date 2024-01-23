@@ -172,13 +172,13 @@ def main():
                         'loss_G_cycle': (loss_cycle_ABA.item() + loss_cycle_BAB.item()), 'loss_D': (loss_D_A.item() + loss_D_B.item())}, 
                         images={'real_A': real_A, 'real_B': real_B, 'fake_A': fake_A, 'fake_B': fake_B})
 
-            f = open("training_curve.csv", "a")
-            f.write('[%d/%d][%d/%d] loss_G: %.4f loss_G_identity: %.4f loss_G_GAN: %.4f loss_G_cycle: %.4f loss_D: %.4f'
-                % (epoch, opt.n_epochs, i+1, len(dataloader),
-                    loss_G.item(),(loss_identity_A.item() + loss_identity_B.item()),(loss_GAN_A2B.item() + loss_GAN_B2A.item()),
-                    (loss_cycle_ABA.item() + loss_cycle_BAB.item()),(loss_D_A.item() + loss_D_B.item())))                 
-            f.write('\n')
-            f.close()
+            # f = open("training_curve.csv", "a")
+            # f.write('[%d/%d][%d/%d] loss_G: %.4f loss_G_identity: %.4f loss_G_GAN: %.4f loss_G_cycle: %.4f loss_D: %.4f'
+            #     % (epoch, opt.n_epochs, i+1, len(dataloader),
+            #         loss_G.item(),(loss_identity_A.item() + loss_identity_B.item()),(loss_GAN_A2B.item() + loss_GAN_B2A.item()),
+            #         (loss_cycle_ABA.item() + loss_cycle_BAB.item()),(loss_D_A.item() + loss_D_B.item())))                 
+            # f.write('\n')
+            # f.close()
             
         # Update learning rates
         lr_scheduler_G.step()
